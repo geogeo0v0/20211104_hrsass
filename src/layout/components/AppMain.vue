@@ -1,6 +1,9 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition
+      name="fade-transform"
+      mode="out-in"
+    >
       <router-view :key="key" />
     </transition>
   </section>
@@ -11,6 +14,8 @@ export default {
   name: 'AppMain',
   computed: {
     key() {
+      // 两个路由的$route.path一样, 所以和没设置 key 属性一样, 会复用组件
+      // /page?id=2, $route.fullPath不一样不会复用
       return this.$route.path
     }
   }

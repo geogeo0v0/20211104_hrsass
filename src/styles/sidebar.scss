@@ -66,6 +66,15 @@
       border: none;
       height: 100%;
       width: 100% !important;
+      li.is-active {
+        background-color: #fff!important;
+        .svg-icon {
+          color: #43a7fe;
+        }
+        span {
+          color: #43a7fe;
+        }
+      }
     }
 
     // menu hover
