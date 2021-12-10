@@ -5,7 +5,7 @@ import store from "@/store";
 
 const whiteList = ["/login", "/404"];
 
-// 导航前置守卫
+// // 导航前置守卫
 router.beforeEach(async (to, from, next) => {
   const token = store.getters.token;
   // 1. 有token的话
@@ -29,7 +29,7 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-// 导航后置守卫
-router.afterEach((to, from) => {
-  // NProgress.done()
-});
+// // 导航后置守卫
+// router.afterEach((to, from) => {
+//   // NProgress.done()
+// });

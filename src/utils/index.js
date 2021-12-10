@@ -1,6 +1,18 @@
-/**
- * Created by PanJiaChen on 16/11/18.
- */
+export function tranListToTreeData(list, rootValue) {
+  let arr = []
+  list.forEach(item => {
+    if (item.pid === rootValue) {
+      // 找到了一层, 还需要根据这层的id, 作为pid, 去找下一层
+      const children = tranListToTreeData(list, item.id)
+      if (children.length > 0) {
+        item.children = children
+      }
+      arr.push(item)
+    }
+  })
+  // console.log('arr', arr)
+  return arr
+}
 
 /**
  * Parse the time to string
@@ -45,7 +57,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str

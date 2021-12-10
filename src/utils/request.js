@@ -24,7 +24,7 @@ instance.interceptors.request.use(function (config) {
 // 响应拦截器
 instance.interceptors.response.use(function (response) {
   const res = response.data
-  console.log('reponse解构一层的res', res)
+  // console.log('reponse解构一层的res', res)
   const { message, success } = res
   // 返回的success非true的错误
   if (!success) {
