@@ -24,6 +24,9 @@ Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 
 import request from './utils/request'
 Vue.prototype.$request = request
+
+import components from './components'
+Vue.use(components)
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

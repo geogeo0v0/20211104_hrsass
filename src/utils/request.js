@@ -34,7 +34,7 @@ instance.interceptors.response.use(function (response) {
   return res
 }, function (error) {
   // token过期的处理
-  if (error.response.status === 401 && error.response.data.code === 10002) {
+  if (error.response?.status === 401 && error.response.data.code === 10002) {
     Message.error('登陆会话过期,请重新登陆')
     store.dispatch('user/logout')
     router.push('/login')
