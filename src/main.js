@@ -22,6 +22,7 @@ Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 //   Vue.directive(k, directives[k])
 // }
 
+
 import request from './utils/request'
 Vue.prototype.$request = request
 
@@ -31,6 +32,8 @@ Vue.use(components)
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+import * as filters from '@/filters'
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 
 Vue.config.productionTip = false
 

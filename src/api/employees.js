@@ -23,3 +23,24 @@ export function reqGetEmployeeList(page, size) {
     }
   })
 }
+
+/**
+ * 删除员工 ()
+ */
+export function reqDelEmployee(id) {
+  return request({
+    method: 'delete',
+    url: `/sys/user/${id}`
+  })
+}
+
+/** **
+ *  新增员工的接口
+ * **/
+export function reqAddEmployee(data) {
+  return request({
+    method: 'post',
+    url: '/sys/user',
+    data
+  })
+}

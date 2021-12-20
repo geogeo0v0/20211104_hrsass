@@ -4,7 +4,7 @@
       <page-tools>
         <template #left>
 
-          总记录条数: 16条
+          总记录条数: {{total}}条
         </template>
         <template #right>
           <el-button
@@ -18,6 +18,7 @@
           <el-button
             type="primary"
             size="small"
+            @click="addEmployee"
           >新增员工</el-button>
         </template>
       </page-tools>
@@ -25,8 +26,8 @@
       <el-card style="margin-top:10px">
         <el-table
           border
-          :data="list"
           v-loading="loading"
+          :data="list"
         >
           <el-table-column
             label="序号"
@@ -48,6 +49,7 @@
             label="聘用形式"
             prop="formOfEmployment"
             sortable=""
+            :formatter="formatterEmployment"
           />
           <el-table-column
             label="部门"
@@ -58,19 +60,31 @@
             label="入职时间"
             prop="timeOfEntry"
             sortable=""
-          />
+          >
+            <template #default="{ row, column, $index }">
+              {{ row.timeOfEntry | formatData }}
+            </template>
+          </el-table-column>>
           <el-table-column
             label="账户状态"
             prop="enableState"
             sortable=""
-          />
+          >
+            <template #default="{ row, column, $index }">
+              <el-switch
+                :value="row.enableState === 1"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+              />
+            </template>
+          </el-table-column>
           <el-table-column
             label="操作"
             sortable=""
             fixed="right"
             width="280"
           >
-            <template>
+            <template #default="{row}">
               <el-button
                 type="text"
                 size="small"
@@ -94,6 +108,7 @@
               <el-button
                 type="text"
                 size="small"
+                @click="delEmployee(row.id)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -107,13 +122,18 @@
           />
         </div>
       </el-card>
+
+      <add-employee :showDialog.sync="showDialog" />
     </div>
   </div>
 </template>
 <!-- 审批 -->
 <script>
-import { reqGetEmployeeList } from '@/api/employees'
+import { reqGetEmployeeList, reqDelEmployee } from '@/api/employees'
+import EmployeeEnum from '@/api/constant/employees'
+import addEmployee from './components/add-employee.vue'
 export default {
+  components: { addEmployee },
   name: 'Approvals',
   data() {
     return {
@@ -121,7 +141,8 @@ export default {
       page: 1, // 当前页
       pageSize: 10, // 每页条数
       total: 0, // 总数
-      loading: false
+      loading: false,
+      showDialog: false
     }
   },
   created() {
@@ -132,17 +153,36 @@ export default {
       this.loading = true
       const { data } = await reqGetEmployeeList(this.page, this.pageSize)
       const { rows, total } = data
-      console.log('row', rows)
       this.list = rows
       this.total = total
       this.loading = false
     },
+    formatterEmployment(row, column, cellValue, index) {
+      const obj = EmployeeEnum.hireType.find(item => item.id === cellValue)
+      return obj ? obj.value : '未知'
+    },
     handleCurrentChange(newpage) {
+      console.log('new', newpage)
       this.page = newpage
       this.getEmployeeList()
     },
     indexMethod(val) {
       return this.pageSize * (this.page - 1) + val + 1
+    },
+    addEmployee() {
+      this.showDialog = true
+    },
+    delEmployee(id) {
+      this.$confirm('确定删除该员工吗?', '提示').then(async () => {
+        await reqDelEmployee(id)
+        if (this.list.length === 1 && this.page > 1) {
+          this.page--
+        }
+        this.getEmployeeList()
+        this.$message.success('删除成功')
+
+      }
+      ).catch((error) => console.log('取消'))
     }
   }
 
