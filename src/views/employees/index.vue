@@ -10,10 +10,12 @@
           <el-button
             type="warning"
             size="small"
+            @click="$router.push('/import?type=user')"
           >excel导入</el-button>
           <el-button
             type="danger"
             size="small"
+            @click="clickExport"
           >excel导出</el-button>
           <el-button
             type="primary"
@@ -88,6 +90,7 @@
               <el-button
                 type="text"
                 size="small"
+                @click="$router.push(`/employees/detail/${row.id}`)"
               >查看</el-button>
               <el-button
                 type="text"
@@ -162,7 +165,6 @@ export default {
       return obj ? obj.value : '未知'
     },
     handleCurrentChange(newpage) {
-      console.log('new', newpage)
       this.page = newpage
       this.getEmployeeList()
     },
@@ -183,6 +185,49 @@ export default {
 
       }
       ).catch((error) => console.log('取消'))
+    },
+    // 导出
+    async clickExport() {
+      // 请注意: 如果导出的是当前页, 那么数据, this.list 即可,
+      // 但是我们一般导出的是全部的数据, 需要请求到所有的数据
+      const { data: { rows } } = await reqGetEmployeeList(1, this.total)
+      const headersArr = ['姓名', '手机号', '入职日期', '聘用形式', '转正日期', '工号', '部门']
+      const headersRelations = {
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+      }
+      const dataArr = this.formatJson(rows, headersArr, headersRelations)
+      import('@/vendor/Export2Excel').then(excel => {
+        console.log('excel', excel)
+        excel.export_json_to_excel({
+          header: headersArr, // 表格头部
+          data: dataArr, // 二维数组
+          filename: '批量员工数据', // 导出的文件名
+          autoWidth: true, // 是否开启单元格宽度自适应
+          bookType: 'xlsx' // 类型
+        })
+      })
+    },
+
+    // 导出数据格式化-将表头数据和数据进行对应
+    formatJson(rows, headersArr, headersRelations) {
+      // [
+      //   [ 值1, 值2, 值3, ... ]
+      // ]
+      console.log({ rows, headersArr, headersRelations })
+      const resArr = rows.map(item => {
+        const arr = []
+        headersArr.forEach(key => {
+          arr.push(item[headersRelations[key]])
+        })
+        return arr
+      })
+      return resArr
     }
   }
 

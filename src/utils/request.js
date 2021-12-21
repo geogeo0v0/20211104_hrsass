@@ -28,6 +28,7 @@ instance.interceptors.response.use(function (response) {
   const { message, success } = res
   // 返回的success非true的错误
   if (!success) {
+    console.log('message', message)
     Message.error(message)
     return Promise.reject(new Error(message))
   }
