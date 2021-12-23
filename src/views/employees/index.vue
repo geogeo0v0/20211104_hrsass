@@ -113,6 +113,7 @@
               <el-button
                 type="text"
                 size="small"
+                @click="editRole(row.id)"
               >角色</el-button>
               <el-button
                 type="text"
@@ -144,6 +145,10 @@
           <canvas ref="myCanvas" />
         </el-row>
       </el-dialog>
+      <assign-role
+        :show-role-dialog.sync="showRoleDialog"
+        :user-id="userId"
+      />
       <add-employee :showDialog.sync="showDialog" />
     </div>
   </div>
@@ -154,8 +159,9 @@ import { reqGetEmployeeList, reqDelEmployee } from '@/api/employees'
 import QrCode from 'qrcode'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
+import AssignRole from './components/assign-role.vue'
 export default {
-  components: { addEmployee },
+  components: { addEmployee, AssignRole },
   name: 'Approvals',
   data() {
     return {
@@ -166,6 +172,8 @@ export default {
       loading: false,
       showDialog: false,
       showCodeDialog: false,
+      showRoleDialog: false,
+      userId: '',
       defaultImg: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2146034403,1504718527&fm=26&gp=0.jpg'
     }
   },
@@ -261,6 +269,10 @@ export default {
     },
     closeDialog() {
       this.showCodeDialog = false
+    },
+    editRole(id) {
+      this.showRoleDialog = true
+      this.userId = id
     }
   }
 
