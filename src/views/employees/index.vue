@@ -35,33 +35,41 @@
             label="序号"
             type="index"
             :index="indexMethod"
-            sortable=""
           />
           <el-table-column
             label="姓名"
             prop="username"
-            sortable=""
           />
+          <el-table-column
+            label="头像"
+            prop="staffPhoto"
+          >
+            <template #default="{ row }">
+              <img
+                v-imgerror="defaultImg"
+                class="staff"
+                :src="row.staffPhoto || defaultImg"
+                alt=""
+                @click="clickShowCodeDialog(row.staffPhoto)"
+              >
+            </template>
+          </el-table-column>
           <el-table-column
             label="工号"
             prop="workNumber"
-            sortable=""
           />
           <el-table-column
             label="聘用形式"
             prop="formOfEmployment"
-            sortable=""
             :formatter="formatterEmployment"
           />
           <el-table-column
             label="部门"
             prop="departmentName"
-            sortable=""
           />
           <el-table-column
             label="入职时间"
             prop="timeOfEntry"
-            sortable=""
           >
             <template #default="{ row, column, $index }">
               {{ row.timeOfEntry | formatData }}
@@ -70,7 +78,6 @@
           <el-table-column
             label="账户状态"
             prop="enableState"
-            sortable=""
           >
             <template #default="{ row, column, $index }">
               <el-switch
@@ -82,7 +89,6 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            sortable=""
             fixed="right"
             width="280"
           >
@@ -125,7 +131,19 @@
           />
         </div>
       </el-card>
-
+      <!-- 分享展示, 预览的二维码的弹层 -->
+      <el-dialog
+        title="二维码"
+        :visible="showCodeDialog"
+        :before-close="closeDialog"
+      >
+        <el-row
+          type="flex"
+          justify="center"
+        >
+          <canvas ref="myCanvas" />
+        </el-row>
+      </el-dialog>
       <add-employee :showDialog.sync="showDialog" />
     </div>
   </div>
@@ -133,6 +151,7 @@
 <!-- 审批 -->
 <script>
 import { reqGetEmployeeList, reqDelEmployee } from '@/api/employees'
+import QrCode from 'qrcode'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
 export default {
@@ -145,7 +164,9 @@ export default {
       pageSize: 10, // 每页条数
       total: 0, // 总数
       loading: false,
-      showDialog: false
+      showDialog: false,
+      showCodeDialog: false,
+      defaultImg: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2146034403,1504718527&fm=26&gp=0.jpg'
     }
   },
   created() {
@@ -228,12 +249,29 @@ export default {
         return arr
       })
       return resArr
+    },
+
+    clickShowCodeDialog(url) {
+      if (!url) return
+      this.showCodeDialog = true
+      this.$nextTick(() => {
+        QrCode.toCanvas(this.$refs.myCanvas, url)
+      })
+
+    },
+    closeDialog() {
+      this.showCodeDialog = false
     }
   }
 
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
+  .staff {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
 </style>

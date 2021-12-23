@@ -15,6 +15,10 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as filters from '@/filters'
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
+
+
 import * as directives from '@/directives'
 Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 // Vue.directive('名称', 方法))
@@ -32,8 +36,8 @@ Vue.use(components)
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-import * as filters from '@/filters'
-Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
+import Print from 'vue-print-nb'
+Vue.use(Print)
 
 Vue.config.productionTip = false
 
