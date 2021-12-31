@@ -6,8 +6,8 @@
     :before-close="handleClose"
   >
     <el-form
-      v-loading="loading"
       ref="deptForm"
+      v-loading="loading"
       :model="form"
       label-width="120px"
       :rules="rules"
@@ -17,22 +17,22 @@
         prop="name"
       >
         <el-input
+          v-model="form.name"
           type="input"
           placeholder="1-50个字符"
           style="width:80%"
-          v-model="form.name"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item
         label="部门编码"
         prop="code"
       >
         <el-input
+          v-model="form.code"
           type="input"
           placeholder="1-50个字符"
           style="width:80%"
-          v-model="form.code"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item
         label="部门负责人"
@@ -48,8 +48,7 @@
             :key="item.id"
             :label="item.username"
             :value="item.username"
-          >
-          </el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item
@@ -57,11 +56,11 @@
         prop="introduce"
       >
         <el-input
+          v-model="form.introduce"
           type="textarea"
           placeholder="1-300个字符"
           style="width:80%"
-          v-model="form.introduce"
-        ></el-input>
+        />
       </el-form-item>
 
     </el-form>
@@ -118,7 +117,6 @@ export default {
       }
       const flag = this.deptsList.filter(item => item.pid === this.currentNode.id).some(i => i.code === value)
       flag ? callback(new Error(`同级部门下已经有${value}的编码了`)) : callback()
-
     }
     return {
       form: {
@@ -143,22 +141,22 @@ export default {
           { validator: checkCodeRepeat, trigger: 'blur' }
         ],
         manager: [
-          { required: true, message: '必填', trigger: 'blur' },
+          { required: true, message: '必填', trigger: 'blur' }
         ],
         introduce: [
           { required: true, message: '必填1-300字符', trigger: 'blur' },
           { min: 1, max: 300, message: '部门介绍要求1-300个字符', trigger: ['blur', 'change'] }
-        ],
+        ]
       }
     }
-  },
-  created() {
-    this.getEmployeeSimple()
   },
   computed: {
     showTitle() {
       return this.form.id ? '编辑部门' : '新增部门'
     }
+  },
+  created() {
+    this.getEmployeeSimple()
   },
   methods: {
     async getEmployeeSimple() {

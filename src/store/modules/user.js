@@ -1,9 +1,12 @@
 import { logout, reqGetUserDetailById, reqGetUserInfo, reqLogin } from "@/api/user"
 import { getToken, setToken, removeToken } from "@/utils/auth"
+import { asyncRoutes, constantRoutes, resetRouter } from '@/router'
+
 
 const state = {
   token: getToken() || null,
-  userInfo: {}
+  userInfo: {},
+  routes: []
 }
 
 const mutations = {
@@ -22,6 +25,13 @@ const mutations = {
   },
   removeUserInfo(state) {
     state.userInfo = {}
+  },
+  setRoutes(state, otherRoutes) {
+    state.routes = [
+      ...constantRoutes,
+      ...otherRoutes,
+      { path: '*', redirect: '/404', hidden: true }
+    ]
   }
 
 }
@@ -47,18 +57,32 @@ const actions = {
   logout({ commit }) {
     commit('removeToken')
     commit('removeUserInfo')
+    resetRouter()
+    commit('setRoutes', [])
 
   },
 
   // 获取用户资料
-  // async getUserInfo({ commit }) {
-  //   const { data: data1 } = await reqGetUserInfo()
-  //   const { data: data2 } = await reqGetUserDetailById(data1.userId)
-  //   // 合并带头像信息的userInfo
-  //   const baseData = { ...data1, ...data2 }
-  //   commit('setUserInfo', baseData)
-  //   return baseData
-  // }
+  async getUserInfo({ commit }) {
+    const { data: data1 } = await reqGetUserInfo()
+    const { data: data2 } = await reqGetUserDetailById(data1.userId)
+    // 合并带头像信息的userInfo
+    const baseData = { ...data1, ...data2 }
+    commit('setUserInfo', baseData)
+    return baseData
+  },
+  filterRoutes({ commit }, menus) {
+    const otherRoutes = asyncRoutes.filter(item => {
+      // 如果路由模块的首页name, 在menus数组中包含, 就是这个模块开放
+      if (menus.includes(item.children[0].name)) {
+        return true
+      } else {
+        return false
+      }
+    })
+    commit('setRoutes', otherRoutes)
+    return otherRoutes
+  }
 }
 export default {
   namespaced: true,

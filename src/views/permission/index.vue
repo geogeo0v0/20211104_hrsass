@@ -237,7 +237,8 @@ export default {
       this.formData.id ? await reqUpdatePermission(this.formData) : await reqAddPermission(this.formData)
       this.$message.success('操作成功')
       this.getPermissionList()
-      this.dialogVisible = false
+      this.dialogBeforeClose()
+
     },
     dialogBeforeClose() {
       this.formData = {

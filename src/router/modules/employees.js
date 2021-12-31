@@ -7,7 +7,7 @@ export default {
   children: [
     {
       path: '',
-      name: 'Employees',
+      name: 'employees',
       component: () => import('@/views/employees'),
       meta: { title: '员工', icon: 'people' }
     },

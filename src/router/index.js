@@ -8,10 +8,10 @@ import Layout from '@/layout'
 import approvalsRouter from './modules/approvals'
 import departmentsRouter from './modules/departments'
 import employeesRouter from './modules/employees'
-import permissionRouter from './modules/permission'
+import permissionRouter from './modules/permissions'
 import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
-import settingRouter from './modules/setting'
+import settingRouter from './modules/settings'
 import socialRouter from './modules/social'
 
 // 静态路由表 =>  静态路由(不需要权限即可访问的)
@@ -53,11 +53,9 @@ export const constantRoutes = [
     ]
   },
 
-  // 没有匹配到的页面, 走404
-  { path: '*', redirect: '/404', hidden: true }
+  // 没有匹配到的页面, 走404  将404放置到动态路由的最后
+  // { path: '*', redirect: '/404', hidden: true }
 ]
-
-
 
 // 动态路由表 => 动态路由(需要权限才可以访问的) 我们这里准备一个数组存放
 export const asyncRoutes = [
@@ -68,22 +66,21 @@ export const asyncRoutes = [
   approvalsRouter,
   attendancesRouter,
   salarysRouter,
-  socialRouter,
+  socialRouter
 ]
-
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }), // 管理滚动行为, 让页面切换时回到顶部
-  routes: [...constantRoutes, ...asyncRoutes] // 临时合并动态路由和静态路由
+  routes: [...constantRoutes] // 临时合并动态路由和静态路由
 })
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+// 重置路由
 export function resetRouter() {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  router.matcher = newRouter.matcher // 重新设置路由的可匹配路径
 }
 
 export default router

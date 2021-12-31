@@ -16,10 +16,10 @@ export default {
       switch (this.type) {
         case 'user':
           this.typeUserImport(header, results)
-          break;
+          break
 
         default:
-          break;
+          break
       }
       // data: [{}, {}, {}, {}, ... ]
 
@@ -43,9 +43,8 @@ export default {
       }
       const arr = results.reduce((pre, cur) => {
         const obj = {}
-        for (let key in cur) {
+        for (const key in cur) {
           ['timeOfEntry', 'correctionTime'].includes(userRelations[key]) ? obj[userRelations[key]] = this.formatExcelDate(cur[key], '-') : obj[userRelations[key]] = cur[key]
-
         }
         pre.push(obj)
         return pre
@@ -55,7 +54,7 @@ export default {
       this.$message.success(message)
     },
     formatExcelDate(numb, format) {
-      const time = new Date((numb - 1) * 24 * 3600000 + 1)  // 毫秒
+      const time = new Date((numb - 1) * 24 * 3600000 + 1) // 毫秒
       time.setYear(time.getFullYear() - 70)
       const year = time.getFullYear() + ''
       const month = time.getMonth() + 1 + ''
