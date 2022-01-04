@@ -13,6 +13,12 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <!-- 换肤组件 -->
+      <theme-picker
+        class="right-menu-item"
+        style="padding-top: 10px"
+        @change="changeTheme"
+      />
       <!-- 全屏组件 -->
       <screen-full class="right-menu-item"></screen-full>
       <el-dropdown
@@ -83,10 +89,23 @@ export default {
       'avatar',
       'name',
       'staffPhoto'
-    ])
+    ]),
+
+    themeColor() {
+      return this.$store.state.settings.theme
+    }
+  },
+  watch: {
+    themeColor: {
+      immediate: true,
+      handler(val) {
+        document.getElementsByTagName('body')[0].style.setProperty('--theme', val)
+      }
+    }
   },
   created() {
   },
+
   methods: {
     ...mapActions('user', ['logout']),
     toggleSideBar() {
@@ -96,17 +115,23 @@ export default {
       // 清除用戶信息和token
       this.logout()
       this.$router.push('/login')
+    },
+    // 更改主题色
+    changeTheme(val) {
+      console.log('theme', val)
+      this.$store.dispatch('settings/changeSetting', { key: 'theme', value: val })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+$theme: var(--theme);
 .navbar {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff ;
+  background: $theme ;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {

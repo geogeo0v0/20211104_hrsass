@@ -59,6 +59,8 @@ const actions = {
     commit('removeUserInfo')
     resetRouter()
     commit('setRoutes', [])
+    // 5. 清除主题色信息
+    commit('settings/resetTheme', null, { root: true })
 
   },
 

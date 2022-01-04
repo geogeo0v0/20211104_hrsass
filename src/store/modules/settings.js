@@ -1,11 +1,13 @@
 import defaultSettings from '@/settings'
-
+import { getThemeCookie, setThemeCookie, removeThemeCookie } from '@/utils/themeCookie'
 const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
-
+const themeDefaultColor = '#5485fd'
+const themeKey = 'hm-hrsaas-exm-theme'
 const state = {
   showSettings: showSettings,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  theme: getThemeCookie() || themeDefaultColor
 }
 
 const mutations = {
@@ -14,6 +16,15 @@ const mutations = {
     if (state.hasOwnProperty(key)) {
       state[key] = value
     }
+    if (key === 'theme') {
+      setThemeCookie(value)
+    }
+  },
+  resetTheme: (state) => {
+    // 重置成默认颜色
+    state.theme = themeDefaultColor
+    // cookies中也要移出
+    removeThemeCookie(themeKey)
   }
 }
 
