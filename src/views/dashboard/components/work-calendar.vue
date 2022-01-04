@@ -108,7 +108,6 @@ export default {
       // console.log('data', data.day)
       // return this.restDay.includes(data.day)
       // 周末休
-      console.log('date.getDay()', (date.getMonth() + 1))
       return [0, 6].includes(date.getDay()) && (date.getMonth() + 1) === this.currentMonth
     }
   }

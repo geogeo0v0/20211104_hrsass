@@ -15,21 +15,21 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import request from './utils/request'
+Vue.prototype.$request = request
+
+// 注册全局过滤器
 import * as filters from '@/filters'
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 
-
+// 注册全局指令
 import * as directives from '@/directives'
 Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 // Vue.directive('名称', 方法))
 // for (const k in directives) {
 //   Vue.directive(k, directives[k])
 // }
-
-
-import request from './utils/request'
-Vue.prototype.$request = request
-
+// 注册全局组件
 import components from './components'
 Vue.use(components)
 // set ElementUI lang to EN
