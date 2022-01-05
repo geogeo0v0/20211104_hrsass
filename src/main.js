@@ -14,6 +14,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import i18n from '@/lang'
+
 import request from './utils/request'
 Vue.prototype.$request = request
 
@@ -32,7 +34,9 @@ Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 import components from './components'
 Vue.use(components)
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 import Print from 'vue-print-nb'
@@ -44,5 +48,6 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })

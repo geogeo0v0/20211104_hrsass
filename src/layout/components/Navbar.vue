@@ -7,7 +7,7 @@
     />
 
     <div class="app-breadcrumb">
-      geogeoooooo 0v0 ~~~
+      {{ $t('route.postInfo') }}
     </div>
 
     <breadcrumb class="breadcrumb-container" />
