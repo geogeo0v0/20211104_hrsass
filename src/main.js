@@ -4,7 +4,6 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -33,6 +32,9 @@ Object.keys(directives).forEach(k => Vue.directive(k, directives[k]))
 // 注册全局组件
 import components from './components'
 Vue.use(components)
+
+import TagsView from './components/TagsView'
+Vue.component('TagsView', TagsView)
 // set ElementUI lang to EN
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value)
