@@ -79,7 +79,7 @@
             label="账户状态"
             prop="enableState"
           >
-            <template #default="{ row, column, $index }">
+            <template #default="{ row }">
               <el-switch
                 :value="row.enableState === 1"
                 active-color="#13ce66"

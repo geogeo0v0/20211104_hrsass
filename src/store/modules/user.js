@@ -1,7 +1,6 @@
-import { logout, reqGetUserDetailById, reqGetUserInfo, reqLogin } from "@/api/user"
+import { reqGetUserDetailById, reqGetUserInfo, reqLogin } from "@/api/user"
 import { getToken, setToken, removeToken } from "@/utils/auth"
 import { asyncRoutes, constantRoutes, resetRouter } from '@/router'
-
 
 const state = {
   token: getToken() || null,
@@ -21,7 +20,6 @@ const mutations = {
 
   setUserInfo(state, newUserInfo) {
     state.userInfo = newUserInfo
-
   },
   removeUserInfo(state) {
     state.userInfo = {}
@@ -61,7 +59,6 @@ const actions = {
     commit('setRoutes', [])
     // 5. 清除主题色信息
     commit('settings/resetTheme', null, { root: true })
-
   },
 
   // 获取用户资料

@@ -9,9 +9,9 @@
 </template>
 <!-- 审批 -->
 <script>
-  export default {
-    name: 'Approvals'
-  }
+export default {
+  name: 'Attendances'
+}
 </script>
 
 <style>
